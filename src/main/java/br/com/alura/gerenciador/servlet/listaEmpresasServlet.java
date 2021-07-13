@@ -8,26 +8,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet("/novaEmpresa")
-public class NovaEmpresaServlet extends HttpServlet {
+@WebServlet("/listaEmpresa")
+public class listaEmpresasServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-
-        String nomeEmpresa = req.getParameter("nome");
-
-        Empresa empresa = new Empresa();
-        empresa.setNome(nomeEmpresa);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 
         Banco banco = new Banco();
-        banco.adiciona(empresa);
+        List<Empresa> lista = banco.getEmpresas();
+        req.setAttribute("empresas", lista);
 
         //chamar o JSP
-        RequestDispatcher rd = req.getRequestDispatcher("/novaEmpresaCriada.jsp");
+        RequestDispatcher rd = req.getRequestDispatcher("/listaEmpresas.jsp");
         //passar o objeto para o JSP
-        req.setAttribute("empresa", empresa.getNome());
         rd.forward(req, resp);
+
     }
 }
